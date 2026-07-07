@@ -58,7 +58,8 @@ body {
     border-radius: 32px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;  /* 내용이 넘칠 경우 스크롤 허용 */
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
 }
@@ -233,9 +234,12 @@ body {
    2. 게임 화면 스타일
    ========================================== */
 #game-screen {
-    padding: 20px;
+    padding: 15px 20px;
     display: none;
+    flex-direction: column;
     background: linear-gradient(180deg, #F1F8E9 0%, #E8F5E9 100%);
+    min-height: 100%;  /* 콘테이너 높이에 맞게 */
+    box-sizing: border-box;
 }
 
 #game-screen.active {
@@ -249,10 +253,11 @@ body {
     align-items: center;
     background: var(--white);
     border-radius: 20px;
-    padding: 10px 25px;
+    padding: 8px 25px;
     box-shadow: var(--card-shadow);
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     z-index: 10;
+    flex-shrink: 0;  /* 헤더가 찌그러지지 않게 */
 }
 
 .score-board {
@@ -366,11 +371,11 @@ body {
 /* 메인 구역 레이아웃 */
 .ward-main {
     display: flex;
-    flex: 1;
+    flex: 0 0 auto;  /* 크기 고정, 찌그러지지 않게 */
     gap: 20px;
     z-index: 2;
-    margin-bottom: 15px;
-    max-height: 400px;
+    margin-bottom: 10px;
+    height: 310px;  /* 고정 높이 */
 }
 
 /* 왼쪽: 환자 구역 */
@@ -551,12 +556,11 @@ body {
     transition: all 0.2s ease;
 }
 
-/* 오른쪽: X-ray 구역 */
+/* 오른쪽: X-ray 구역 - 타이밍 패널 제거 후 단순화 */
 .diagnostic-zone {
     flex: 0.8;
     display: flex;
     flex-direction: column;
-    gap: 15px;
 }
 
 /* X-ray 모니터 */
@@ -645,18 +649,21 @@ body {
     animation: pulse-glow 1.2s ease-in-out infinite alternate;
 }
 
-/* 치료 타이밍 패널 (기본 숨김) */
+/* 치료 타이밍 패널 - 전체 너비 독립 행으로 표시 */
 .timing-panel {
     background: linear-gradient(135deg, #E3F2FD 0%, #E8F5E9 100%);
     border: 4px solid var(--secondary-color);
     border-radius: 20px;
-    padding: 14px 18px;
-    display: none; /* 드래그 드롭 성공 시 활성화 */
-    flex-direction: column;
+    padding: 12px 20px;
+    display: none;  /* 카드 드롭 성공 시 활성화 */
+    flex-direction: row;       /* 가로 배치: 타이틀 | 게이지 | 버튼 */
     align-items: center;
+    gap: 14px;
     box-shadow: 0 8px 24px rgba(2, 136, 209, 0.2);
     animation: slide-up-timing 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    gap: 6px;
+    z-index: 2;
+    margin-bottom: 10px;
+    flex-shrink: 0;
 }
 
 .timing-panel.active {
@@ -665,22 +672,22 @@ body {
 
 .timing-title {
     font-family: var(--font-fancy);
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: var(--secondary-color);
-    margin-bottom: 2px;
+    white-space: nowrap;  /* 줄바꿈 방지 */
+    flex-shrink: 0;
     text-shadow: 1px 1px 0px rgba(0,0,0,0.02);
-    letter-spacing: 1px;
 }
 
 .timing-bar-container {
-    width: 100%;
-    height: 56px;  /* 훨씬 크게 */
+    flex: 1;         /* 가로 방향으로 남은 공간 채움 */
+    height: 56px;
     background: #B0BEC5;
     border-radius: 14px;
     position: relative;
     border: 3px solid #78909C;
-    margin-bottom: 4px;
-    overflow: visible; /* 라벨이 바깥으로 나오게 */
+    overflow: visible;
+    min-width: 0;
 }
 
 /* PERFECT TARGET ZONE - 크고 선명하게 */
@@ -745,18 +752,18 @@ body {
 }
 
 .laser-btn {
-    width: 100%;
     font-family: var(--font-fancy);
     background: linear-gradient(135deg, #FF6F00 0%, #E65100 100%);
     color: var(--white);
     border: none;
     border-radius: 14px;
-    padding: 10px;
-    font-size: 1.6rem;
+    padding: 10px 14px;
+    font-size: 1.3rem;
     cursor: pointer;
     box-shadow: 0 4px 14px rgba(255, 111, 0, 0.45);
     transition: all 0.15s ease;
-    letter-spacing: 1px;
+    white-space: nowrap;  /* 버튼 텍스트 줄바꿈 방지 */
+    flex-shrink: 0;
     animation: laser-btn-pulse 1s ease-in-out infinite alternate;
 }
 
@@ -770,13 +777,7 @@ body {
 }
 
 .timing-tip {
-    font-size: 0.85rem;
-    color: #37474F;
-    font-weight: 900;
-    background: #FFF9C4;
-    border: 2px solid #FDD835;
-    border-radius: 8px;
-    padding: 4px 12px;
+    display: none;  /* 가로 배치에서 tip은 숨겨서 깔끔하게 */
 }
 
 /* ==========================================
@@ -785,15 +786,16 @@ body {
 .cards-area {
     background: var(--white);
     border-radius: 24px;
-    padding: 12px 20px;
+    padding: 10px 20px;
     box-shadow: var(--card-shadow);
     z-index: 2;
+    flex-shrink: 0;  /* 카드 영역이 찌그러지지 않게 */
 }
 
 .section-title {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     color: var(--secondary-color);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-align: center;
 }
 
