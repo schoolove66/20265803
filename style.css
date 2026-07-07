@@ -1,0 +1,1071 @@
+/* ==========================================
+   CSS Design System & Stylesheet
+   Theme: Clean, Hopeful, Playful Hospital (Pastel Mint, Light Blue, Soft Pink)
+   ========================================== */
+
+/* 폰트 및 공통 리셋 */
+:root {
+    --primary-color: #00BFA5; /* 청량한 민트 */
+    --primary-dark: #008B7A;
+    --primary-light: #E0F2F1;
+    --secondary-color: #0288D1; /* 활기찬 스카이 블루 */
+    --accent-color: #FF4081; /* 발랄한 핑크 */
+    --accent-light: #FCE4EC;
+    --bg-color: #E8F5E9; /* 부드러운 그린 연두 배경 */
+    --text-color: #263238; /* 진한 회색 */
+    --white: #FFFFFF;
+    --card-shadow: 0 8px 24px rgba(38, 50, 56, 0.08);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --font-fancy: 'Gamja Flower', cursive;
+    --font-sans: 'Noto Sans KR', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+body {
+    background-color: #C8E6C9; /* 옅은 파스텔 그린 */
+    background-image: radial-gradient(circle at 20% 30%, #E8F5E9 0%, transparent 40%),
+                      radial-gradient(circle at 80% 70%, #E0F2F1 0%, transparent 45%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    overflow: hidden;
+}
+
+/* 폰트 장식용 클래스 */
+.font-fancy {
+    font-family: var(--font-fancy);
+    font-weight: bold;
+}
+
+/* 메인 게임 컨테이너 (고정 비율 및 반응형 제공) */
+#game-container {
+    width: 1000px;
+    height: 700px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 6px solid var(--white);
+    border-radius: 32px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 사운드 제어 버튼 */
+.audio-control {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 100;
+    display: flex;
+    gap: 10px;
+}
+
+.control-btn {
+    background: var(--white);
+    border: 2px solid var(--primary-light);
+    border-radius: 16px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+    transform: translateY(-2px);
+    background: var(--primary-light);
+}
+
+.control-btn.muted {
+    background: #ECEFF1;
+    color: #90A4AE;
+    border-color: #CFD8DC;
+}
+
+/* 화면 공통 스타일 */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* ==========================================
+   1. 시작 화면 스타일
+   ========================================== */
+#start-screen {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, #E0F2F1 0%, #E8F5E9 100%);
+}
+
+.logo-area {
+    margin-bottom: 20px;
+}
+
+.logo-decoration {
+    font-size: 3rem;
+    animation: float-logo 3s ease-in-out infinite;
+    margin-bottom: 10px;
+}
+
+#start-screen h1 {
+    font-family: var(--font-fancy);
+    font-size: 4.5rem;
+    color: var(--primary-dark);
+    text-shadow: 2px 2px 0px var(--white), 4px 4px 10px rgba(0,0,0,0.06);
+    margin-bottom: 5px;
+}
+
+#start-screen .subtitle {
+    font-size: 1.2rem;
+    color: #546E7A;
+    font-weight: 500;
+}
+
+.start-character-deco {
+    margin: 15px 0;
+    position: relative;
+}
+
+.doctor-svg {
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.06));
+    animation: doctor-bounce 2.5s ease-in-out infinite;
+}
+
+/* 설명란 스타일 */
+.instructions {
+    background: var(--white);
+    border: 3px solid var(--primary-light);
+    border-radius: 20px;
+    padding: 15px 25px;
+    max-width: 600px;
+    text-align: left;
+    margin-bottom: 25px;
+    box-shadow: var(--card-shadow);
+}
+
+.instructions h3 {
+    color: var(--secondary-color);
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+    border-bottom: 2px dashed var(--primary-light);
+    padding-bottom: 4px;
+}
+
+.instructions ul {
+    list-style-type: none;
+}
+
+.instructions li {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin-bottom: 6px;
+    position: relative;
+    padding-left: 18px;
+}
+
+.instructions li::before {
+    content: "•";
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    position: absolute;
+    left: 4px;
+    top: -1px;
+}
+
+.main-btn {
+    font-family: var(--font-fancy);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: var(--white);
+    font-size: 2.2rem;
+    padding: 12px 48px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 191, 165, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-bottom: 15px;
+}
+
+.main-btn:hover {
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 12px 25px rgba(0, 191, 165, 0.45);
+}
+
+.main-btn:active {
+    transform: scale(0.98) translateY(-1px);
+}
+
+.footer-msg {
+    font-family: var(--font-fancy);
+    font-size: 1.6rem;
+    color: var(--accent-color);
+    letter-spacing: 1px;
+}
+
+/* ==========================================
+   2. 게임 화면 스타일
+   ========================================== */
+#game-screen {
+    padding: 20px;
+    display: none;
+    background: linear-gradient(180deg, #F1F8E9 0%, #E8F5E9 100%);
+}
+
+#game-screen.active {
+    display: flex;
+}
+
+/* 상단 정보바 */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--white);
+    border-radius: 20px;
+    padding: 10px 25px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 15px;
+    z-index: 10;
+}
+
+.score-board {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+}
+
+.score-label {
+    font-family: var(--font-fancy);
+    font-size: 1.8rem;
+    color: var(--text-color);
+}
+
+.score-val {
+    font-family: var(--font-fancy);
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    animation: pulse-score 0.3s ease;
+}
+
+.score-target {
+    font-size: 0.9rem;
+    color: #78909C;
+    font-weight: 700;
+}
+
+/* 프로그레스 바 */
+.progress-container {
+    width: 60%;
+    height: 18px;
+    background: #ECEFF1;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid #CFD8DC;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-radius: 10px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.progress-bar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+}
+
+/* 간호사가 오가는 움직이는 뒷배경 */
+.ward-background {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    height: 480px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.hospital-window {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 100px;
+    border: 4px solid var(--white);
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(180deg, #E0F7FA 0%, #80DEEA 100%);
+    box-shadow: inset 0 8px 15px rgba(0,0,0,0.05);
+}
+
+.hospital-window::after {
+    content: "☁️";
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    font-size: 1.5rem;
+    opacity: 0.8;
+    animation: float-cloud 8s linear infinite;
+}
+
+/* 간호사 캐릭터 스타일 */
+.nurse-character {
+    width: 48px;
+    height: 60px;
+    position: absolute;
+    bottom: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.85;
+}
+
+.walking-right {
+    animation: nurse-walk-right 18s linear infinite;
+}
+
+.walking-left {
+    animation: nurse-walk-left 22s linear infinite;
+}
+
+/* 메인 구역 레이아웃 */
+.ward-main {
+    display: flex;
+    flex: 1;
+    gap: 20px;
+    z-index: 2;
+    margin-bottom: 15px;
+    max-height: 400px;
+}
+
+/* 왼쪽: 환자 구역 */
+.patient-zone {
+    flex: 1.2;
+    background: rgba(255, 255, 255, 0.55);
+    border: 3px solid var(--white);
+    border-radius: 24px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 15px;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(5px);
+}
+
+/* 환자 말풍선 */
+.speech-bubble {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    right: 20px;
+    background: var(--white);
+    border: 3px solid var(--primary-color);
+    border-radius: 20px;
+    padding: 12px 18px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+.speech-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 80px;
+    border-width: 15px 12px 0;
+    border-style: solid;
+    border-color: var(--primary-color) transparent;
+    display: block;
+    width: 0;
+}
+
+.speech-bubble::before {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 80px;
+    border-width: 12px 9px 0;
+    border-style: solid;
+    border-color: var(--white) transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+}
+
+/* 환자 베드 시스템 */
+.bed-area {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.hospital-bed {
+    width: 320px;
+    height: 120px;
+    background: #CFD8DC;
+    border-radius: 12px 12px 0 0;
+    position: relative;
+    border: 4px solid #B0BEC5;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+/* 침대 다리 */
+.hospital-bed::before {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 20px;
+    width: 10px;
+    height: 20px;
+    background: #90A4AE;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 4px 0 0 #B0BEC5;
+}
+
+.hospital-bed::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    right: 20px;
+    width: 10px;
+    height: 20px;
+    background: #90A4AE;
+    border-radius: 0 0 4px 4px;
+    box-shadow: -4px 0 0 #B0BEC5;
+}
+
+/* 환자 캐릭터 컨테이너 */
+.patient-svg-container {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    height: 160px;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.bed-sheets {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: #E1F5FE;
+    border-top: 6px solid #4FC3F7;
+    border-radius: 8px 8px 0 0;
+    z-index: 3;
+}
+
+/* 의사 가이드 캐릭터 */
+.doctor-assistant {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 4;
+}
+
+.assistant-speech {
+    background: var(--secondary-color);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    max-width: 160px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.assistant-speech::after {
+    content: "";
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 6px 0 6px 8px;
+    border-style: solid;
+    border-color: transparent var(--secondary-color);
+    display: block;
+    width: 0;
+}
+
+.assistant-body {
+    width: 45px;
+    height: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* 드롭 대상 시각 효과 */
+.patient-zone.dragover {
+    background: rgba(0, 191, 165, 0.15);
+    border: 3px dashed var(--primary-color);
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+}
+
+/* 오른쪽: X-ray 구역 */
+.diagnostic-zone {
+    flex: 0.8;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* X-ray 모니터 */
+.xray-monitor {
+    background: #37474F;
+    border: 8px solid #263238;
+    border-radius: 16px;
+    padding: 10px;
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+.xray-screen {
+    flex: 1;
+    background: #001015;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #546E7A;
+}
+
+.xray-scanline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(0, 229, 255, 0.4);
+    box-shadow: 0 0 10px #00E5FF;
+    animation: xray-scan 3.5s linear infinite;
+    z-index: 3;
+}
+
+#xray-visual {
+    width: 90%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.xray-status-text {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    color: #00E5FF;
+    font-size: 0.72rem;
+    font-family: monospace;
+    letter-spacing: 1px;
+    z-index: 3;
+    text-shadow: 0 0 3px #00E5FF;
+}
+
+.monitor-stand {
+    width: 40px;
+    height: 25px;
+    background: #263238;
+    margin: 0 auto;
+    border-bottom: 4px solid #1A237E;
+    position: relative;
+    z-index: -1;
+}
+
+.monitor-stand::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: -20px;
+    width: 80px;
+    height: 10px;
+    background: #37474F;
+    border-radius: 4px 4px 0 0;
+}
+
+/* X-ray 뼈/근육 통증 펄스 애니메이션 */
+.pain-glow {
+    fill: #FF1744 !important;
+    animation: pulse-glow 1.2s ease-in-out infinite alternate;
+}
+
+/* 치료 타이밍 패널 (기본 숨김) */
+.timing-panel {
+    background: var(--white);
+    border: 3px solid var(--secondary-color);
+    border-radius: 20px;
+    padding: 10px 15px;
+    display: none; /* 드래그 드롭 성공 시 활성화 */
+    flex-direction: column;
+    align-items: center;
+    box-shadow: var(--card-shadow);
+    animation: slide-up-timing 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.timing-panel.active {
+    display: flex;
+}
+
+.timing-title {
+    font-family: var(--font-fancy);
+    font-size: 1.3rem;
+    color: var(--secondary-color);
+    margin-bottom: 8px;
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.02);
+}
+
+.timing-bar-container {
+    width: 100%;
+    height: 24px;
+    background: #ECEFF1;
+    border-radius: 12px;
+    position: relative;
+    border: 2px solid #B0BEC5;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+/* PERFECT TARGET ZONE */
+.timing-perfect-zone {
+    position: absolute;
+    top: 0;
+    left: 42.5%; /* 중앙에 15% 너비 */
+    width: 15%;
+    height: 100%;
+    background: linear-gradient(180deg, #66BB6A 0%, #43A047 100%);
+    box-shadow: 0 0 10px #43A047;
+    z-index: 1;
+}
+
+/* 움직이는 슬라이더 커서 */
+.timing-slider {
+    position: absolute;
+    top: -2px;
+    left: 0%;
+    width: 12px;
+    height: 24px;
+    background: var(--accent-color);
+    border: 2px solid var(--white);
+    border-radius: 4px;
+    z-index: 2;
+    box-shadow: 0 0 8px var(--accent-color);
+}
+
+.laser-btn {
+    width: 100%;
+    font-family: var(--font-fancy);
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #01579B 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    padding: 8px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    transition: all 0.15s ease;
+}
+
+.laser-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(2, 136, 209, 0.4);
+}
+
+.laser-btn:active {
+    transform: translateY(0);
+}
+
+.timing-tip {
+    font-size: 0.72rem;
+    color: #78909C;
+    margin-top: 4px;
+    font-weight: 700;
+}
+
+/* ==========================================
+   3. 치료 카드 구역 스타일
+   ========================================== */
+.cards-area {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 12px 20px;
+    box-shadow: var(--card-shadow);
+    z-index: 2;
+}
+
+.section-title {
+    font-size: 1.4rem;
+    color: var(--secondary-color);
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+}
+
+/* 개별 카드 스타일 */
+.remedy-card {
+    flex: 1;
+    max-width: 180px;
+    height: 95px;
+    background: #FAFAFA;
+    border: 3px solid #E0E0E0;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    cursor: grab;
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+    padding: 8px;
+    text-align: center;
+}
+
+.remedy-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+    box-shadow: 0 8px 15px rgba(0, 191, 165, 0.12);
+}
+
+.remedy-card:active {
+    cursor: grabbing;
+}
+
+.remedy-card.dragging {
+    opacity: 0.4;
+    transform: scale(0.95);
+    border-style: dashed;
+}
+
+.card-icon {
+    font-size: 1.8rem;
+}
+
+.card-label {
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: var(--text-color);
+}
+
+/* ==========================================
+   4. 모달 & 팝업 스타일
+   ========================================== */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(38, 50, 56, 0.5);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    animation: fade-in 0.25s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+/* 해설 설명 모달 */
+.modal-content {
+    width: 480px;
+    background: var(--white);
+    border-radius: 28px;
+    border: 5px solid var(--primary-color);
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    animation: zoom-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-icon {
+    font-size: 3.5rem;
+    margin-bottom: 12px;
+    animation: bounce-icon 2s infinite alternate;
+}
+
+#explanation-modal h2 {
+    font-family: var(--font-fancy);
+    font-size: 2.2rem;
+    color: var(--primary-dark);
+    margin-bottom: 15px;
+}
+
+/* 틀린 답인 경우 테두리 및 텍스트 색 변경을 위한 클래스 */
+.modal-content.incorrect {
+    border-color: var(--accent-color);
+}
+
+.modal-content.incorrect h2 {
+    color: var(--accent-color);
+}
+
+.modal-body {
+    background: #F5F7F8;
+    border-radius: 18px;
+    padding: 15px 20px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #37474F;
+    margin-bottom: 25px;
+    text-align: left;
+    border: 1px solid #ECEFF1;
+    font-weight: 500;
+}
+
+.confirm-btn {
+    font-family: var(--font-fancy);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    padding: 10px 35px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(0, 191, 165, 0.25);
+    transition: all 0.2s ease;
+}
+
+.confirm-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 191, 165, 0.35);
+}
+
+.modal-content.incorrect .confirm-btn {
+    background: linear-gradient(135deg, var(--accent-color) 0%, #D81B60 100%);
+    box-shadow: 0 6px 14px rgba(255, 64, 129, 0.25);
+}
+
+.modal-content.incorrect .confirm-btn:hover {
+    box-shadow: 0 8px 18px rgba(255, 64, 129, 0.35);
+}
+
+/* 결과 창 (승리/게임오버) */
+.result-content {
+    width: 520px;
+    background: var(--white);
+    border-radius: 32px;
+    border: 6px solid var(--secondary-color);
+    padding: 35px;
+    text-align: center;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+    animation: zoom-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.result-emoji {
+    font-size: 4.5rem;
+    margin-bottom: 12px;
+}
+
+#result-screen h2 {
+    font-family: var(--font-fancy);
+    font-size: 3rem;
+    color: var(--secondary-color);
+    margin-bottom: 5px;
+}
+
+.result-subtitle {
+    font-size: 1.1rem;
+    color: #78909C;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.result-message {
+    font-size: 2.2rem;
+    color: var(--accent-color);
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+/* 완치된 환자 갤러리 */
+.cured-gallery {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.cured-thumbnail {
+    width: 60px;
+    height: 60px;
+    border-radius: 50px;
+    border: 3px solid var(--primary-light);
+    background: #E0F2F1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+/* ==========================================
+   5. 파티클 및 특수 이펙트
+   ========================================== */
+#particle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 300;
+}
+
+.particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particle-shoot 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+/* ==========================================
+   6. Keyframe 애니메이션 정의
+   ========================================== */
+@keyframes float-logo {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(5deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes doctor-bounce {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes float-cloud {
+    0% { transform: translateX(200px); }
+    100% { transform: translateX(-200px); }
+}
+
+@keyframes xray-scan {
+    0% { top: 0%; }
+    50% { top: 100%; }
+    100% { top: 0%; }
+}
+
+@keyframes pulse-score {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+@keyframes pulse-glow {
+    0% { filter: drop-shadow(0 0 2px #FF1744); }
+    100% { filter: drop-shadow(0 0 15px #FF1744); }
+}
+
+@keyframes slide-up-timing {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes bounce-icon {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+}
+
+@keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes zoom-in {
+    0% { transform: scale(0.85); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes particle-shoot {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--dx), var(--dy)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* 간호사 캐릭터 무한 걷기 */
+@keyframes nurse-walk-right {
+    0% { left: -100px; transform: scaleX(1); }
+    45% { left: 1100px; transform: scaleX(1); }
+    50% { left: 1100px; transform: scaleX(-1); }
+    95% { left: -100px; transform: scaleX(-1); }
+    100% { left: -100px; transform: scaleX(1); }
+}
+
+@keyframes nurse-walk-left {
+    0% { right: -100px; transform: scaleX(1); }
+    45% { right: 1100px; transform: scaleX(1); }
+    50% { right: 1100px; transform: scaleX(-1); }
+    95% { right: -100px; transform: scaleX(-1); }
+    100% { right: -100px; transform: scaleX(1); }
+}

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>튼튼 뼈 근육 치료실 - 건강 지킴이 게임</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: 오밀조밀하고 동글동글한 느낌을 위해 'Gamja Flower'와 깔끔한 'Noto Sans KR' 사용 -->
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-container">
+        <!-- 배경 음악 및 소리 조절용 상단 공통 바 -->
+        <div class="audio-control">
+            <button id="mute-bgm" class="control-btn" title="배경음악 켜기/끄기">🎵 BGM ON</button>
+            <button id="mute-sfx" class="control-btn" title="효과음 켜기/끄기">🔊 SFX ON</button>
+        </div>
+
+        <!-- 1. 시작 화면 -->
+        <div id="start-screen" class="screen active">
+            <div class="logo-area">
+                <div class="logo-decoration">🏥✨🦴💪</div>
+                <h1>튼튼 뼈 근육 치료실</h1>
+                <p class="subtitle">다친 사람들의 뼈와 근육을 치료하고 병원을 구해내자!</p>
+            </div>
+            
+            <!-- 귀여운 캐릭터 일러스트 데코레이션 -->
+            <div class="start-character-deco">
+                <!-- SVG 의사 캐릭터 -->
+                <svg class="doctor-svg" viewBox="0 0 100 100" width="120" height="120">
+                    <circle cx="50" cy="35" r="20" fill="#FFE0B2"/> <!-- 얼굴 -->
+                    <circle cx="43" cy="32" r="2.5" fill="#3E2723"/> <!-- 왼쪽 눈 -->
+                    <circle cx="57" cy="32" r="2.5" fill="#3E2723"/> <!-- 오른쪽 눈 -->
+                    <path d="M 45 42 Q 50 47 55 42" stroke="#3E2723" stroke-width="2" fill="none"/> <!-- 웃는 입 -->
+                    <!-- 머리카락 -->
+                    <path d="M 30 30 Q 50 15 70 30 Q 75 20 50 10 Q 25 20 30 30" fill="#3E2723"/>
+                    <!-- 안경 -->
+                    <circle cx="43" cy="32" r="6" stroke="#4FC3F7" stroke-width="2.5" fill="none"/>
+                    <circle cx="57" cy="32" r="6" stroke="#4FC3F7" stroke-width="2.5" fill="none"/>
+                    <line x1="49" y1="32" x2="51" y2="32" stroke="#4FC3F7" stroke-width="2.5"/>
+                    <!-- 의사 가운 몸통 -->
+                    <path d="M 30 55 L 70 55 L 75 90 L 25 90 Z" fill="#ECEFF1"/>
+                    <!-- 청진기 -->
+                    <path d="M 38 48 Q 50 65 62 48" stroke="#78909C" stroke-width="3" fill="none"/>
+                    <circle cx="50" cy="65" r="5" fill="#B0BEC5"/>
+                    <circle cx="50" cy="35" r="22" stroke="#FF8A80" stroke-width="2" stroke-dasharray="2,2" fill="none"/> <!-- 생기 오라 -->
+                </svg>
+            </div>
+
+            <div class="instructions">
+                <h3>📖 게임 방법</h3>
+                <ul>
+                    <li>🏥 다친 환자들의 뼈와 근육 증상을 확인하세요.</li>
+                    <li>👉 증상에 맞는 <strong>옳은 건강 방법 카드</strong>를 선택하여 환자에게 드래그하세요!</li>
+                    <li>⚡ 카드를 올리면 <strong>치료 레이저 타이밍 게이지</strong>가 작동합니다.</li>
+                    <li>🎯 슬라이더가 <strong>초록색(Perfect) 영역</strong>에 맞춰졌을 때 화면을 클릭하거나 스페이스바를 누르세요!</li>
+                    <li>💡 정답을 맞추면 <strong>+10점</strong>과 함께 건강 설명이 나오고, 틀리면 <strong>-10점</strong>이 깎입니다.</li>
+                    <li>⭐ <strong>100점</strong>을 모으면 승리! <strong>0점</strong>이 되면 게임오버입니다. (시작 점수: 30점)</li>
+                </ul>
+            </div>
+
+            <button id="start-btn" class="main-btn">치료 시작하기! 🚀</button>
+            
+            <div class="footer-msg">"다치지 않게 우리 몸을 잘 지켜요!"</div>
+        </div>
+
+        <!-- 2. 게임 본 화면 -->
+        <div id="game-screen" class="screen">
+            <!-- 상단 상태바 -->
+            <div class="game-header">
+                <div class="score-board">
+                    <span class="score-label">🏥 점수:</span>
+                    <span id="current-score" class="score-val">30</span>
+                    <span class="score-target">/ 100 점</span>
+                </div>
+                <!-- 점수 프로그레스 바 -->
+                <div class="progress-container">
+                    <div id="score-progress" class="progress-bar" style="width: 30%;"></div>
+                </div>
+            </div>
+
+            <!-- 병원 복도/병동 배경 (간호사 캐릭터 애니메이션이 들어갈 곳) -->
+            <div class="ward-background">
+                <div class="hospital-window"></div>
+                <!-- 움직이는 간호사 1, 2 -->
+                <div id="nurse-left" class="nurse-character walking-right"></div>
+                <div id="nurse-right" class="nurse-character walking-left"></div>
+            </div>
+
+            <!-- 메인 진료 액션 레이아웃 -->
+            <div class="ward-main">
+                <!-- 왼쪽: 환자와 의사 구역 -->
+                <div class="patient-zone" id="patient-drop-zone">
+                    <!-- 환자 말풍선 -->
+                    <div class="speech-bubble" id="patient-speech">
+                        아이고, 운동하다 다쳤나봐요...
+                    </div>
+                    
+                    <!-- 환자 침대 및 환자 캐릭터 -->
+                    <div class="bed-area">
+                        <div class="hospital-bed">
+                            <!-- 환자 SVG 캐릭터가 동적으로 들어갈 영역 -->
+                            <div id="patient-character" class="patient-svg-container"></div>
+                            <div class="bed-sheets"></div>
+                        </div>
+                    </div>
+
+                    <!-- 의사 도우미 -->
+                    <div class="doctor-assistant">
+                        <div class="assistant-speech" id="doctor-speech">환자분의 아픈 곳을 찾아보세요!</div>
+                        <div class="assistant-body"></div>
+                    </div>
+                </div>
+
+                <!-- 오른쪽: X-ray 진단기 및 타이밍 치료 게이지 -->
+                <div class="diagnostic-zone">
+                    <!-- X-ray 모니터 -->
+                    <div class="xray-monitor">
+                        <div class="xray-screen">
+                            <div class="xray-scanline"></div>
+                            <div id="xray-visual">
+                                <!-- 아픈 뼈/근육 SVG 그래픽이 들어갈 공간 -->
+                            </div>
+                            <div class="xray-status-text" id="xray-status">상태: 진단 대기 중</div>
+                        </div>
+                        <div class="monitor-stand"></div>
+                    </div>
+
+                    <!-- 타이밍 미니게임 패널 (카드를 드롭하면 나타남) -->
+                    <div id="timing-panel" class="timing-panel">
+                        <div class="timing-title">⚡ 치료 레이저 주파수 튜닝 ⚡</div>
+                        <div class="timing-bar-container">
+                            <div class="timing-perfect-zone"></div>
+                            <div id="timing-slider" class="timing-slider"></div>
+                        </div>
+                        <button id="activate-laser-btn" class="laser-btn">치료 가동! (클릭 또는 SPACE)</button>
+                        <div class="timing-tip">초록색 칸에 정확히 멈추세요!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단: 카드 선택 슬롯 -->
+            <div class="cards-area">
+                <div class="section-title font-fancy">🏥 어떤 치료법을 처방할까요? (알맞은 카드를 환자에게 드래그하세요)</div>
+                <div class="cards-container" id="cards-container">
+                    <!-- 카드가 동적으로 4장 렌더링됨 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 설명 팝업 모달 (치료 성공/실패 시 해설 제공) -->
+        <div id="explanation-modal" class="modal-overlay">
+            <div class="modal-content">
+                <div id="modal-icon" class="modal-icon">🩺</div>
+                <h2 id="modal-title">치료 결과</h2>
+                <div id="modal-body" class="modal-body">
+                    여기에 설명글이 채워집니다.
+                </div>
+                <button id="modal-confirm-btn" class="confirm-btn">확인 후 점수 반영하기</button>
+            </div>
+        </div>
+
+        <!-- 4. 결과 창 (승리/게임오버) -->
+        <div id="result-screen" class="modal-overlay">
+            <div class="result-content">
+                <div id="result-emoji" class="result-emoji">🎉</div>
+                <h2 id="result-title">게임 결과</h2>
+                <p id="result-subtitle" class="result-subtitle">부제가 들어갑니다.</p>
+                <div class="result-message font-fancy">
+                    "다치지 않게 우리 몸을 잘 지켜요!"
+                </div>
+                
+                <!-- 승리 시 나오는 미니 환자 회복 콜라주 -->
+                <div id="cured-patients-gallery" class="cured-gallery"></div>
+
+                <button id="retry-btn" class="main-btn">다시 도전하기 🔄</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 파티클 이펙트 컨테이너 -->
+    <div id="particle-container"></div>
+
+    <script src="game.js"></script>
+</body>
+</html>
